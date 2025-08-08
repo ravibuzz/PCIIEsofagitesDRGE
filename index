@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interativo de Patologia: Esofagites e DRGE (30 Questões)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .option-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .rationale {
+            display: none;
+            transition: all 0.3s ease-in-out;
+        }
+        .show-rationale {
+            display: block;
+        }
+        /* Animação para o aparecimento das questões */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen p-4">
+
+    <main id="quiz-container" class="w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+        
+        <!-- Cabeçalho do Quiz -->
+        <header class="p-6 bg-blue-700 text-white">
+            <h1 class="text-2xl md:text-3xl font-bold text-center">Quiz Completo: Esofagites e DRGE</h1>
+            <p class="text-center text-blue-200 mt-1">30 questões de alta complexidade para testar seu conhecimento.</p>
+        </header>
+
+        <div id="quiz-content" class="p-6 md:p-8">
+            <!-- Conteúdo do Quiz (gerado via JS) -->
+        </div>
+
+        <!-- Rodapé com Navegação -->
+        <footer id="quiz-footer" class="p-6 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
+            <div id="progress-bar-container" class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+            </div>
+            <button id="next-btn" class="ml-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-transform transform hover:scale-105 hidden">
+                Próxima
+            </button>
+        </footer>
+
+    </main>
+
+    <script>
+        const quizData = [
+            // Parte 1: Conceitos Fundamentais
+            {
+                question: "Um médico explica que a pneumonia pneumocócica é causada pela bactéria *Streptococcus pneumoniae* e que a doença se desenvolve porque a bactéria induz uma resposta inflamatória que preenche os alvéolos com exsudato. Como esses dois componentes da explicação são classificados, respectivamente?",
+                options: ["Etiologia e Fisiopatologia.", "Patogenia e Histopatologia.", "Etiologia e Patogenia.", "Fisiopatogenia e Anatomopatologia."],
+                correct: 2,
+                rationales: [
+                    "Incorreto. A fisiopatologia descreve as alterações funcionais, enquanto a explicação descreve o mecanismo de instalação da doença (patogenia).",
+                    "Incorreto. A causa (*S. pneumoniae*) é a etiologia, não a patogenia. A histopatologia se refere às alterações microscópicas do tecido.",
+                    "Correto. A etiologia é o agente causal (*S. pneumoniae*), e a patogenia é o mecanismo pelo qual o agente agressor instala a doença.",
+                    "Incorreto. A causa não é a fisiopatogenia (como a função foi mudando). A explicação foca no mecanismo, não apenas na alteração estrutural (anatomopatologia)."
+                ]
+            },
+            {
+                question: "Qual termo descreve especificamente a disciplina que estuda as alterações morfológicas visíveis apenas ao microscópio em um tecido doente, como a presença de células caliciformes no epitélio esofágico?",
+                options: ["Anatomopatologia.", "Fisiopatologia.", "Histopatologia.", "Histopatogenia."],
+                correct: 2,
+                rationales: [
+                    "Incorreto. A anatomopatologia é um termo mais amplo que inclui tanto as alterações macroscópicas quanto as microscópicas.",
+                    "Incorreto. A fisiopatologia foca nas alterações de função do órgão ou tecido, e não nas alterações estruturais microscópicas.",
+                    "Correto. A histopatologia é o estudo específico das alterações microscópicas dos tecidos ('histo' = tecido).",
+                    "Incorreto. A histopatogenia estuda *como* o tecido foi mudando ao nível microscópico, não apenas o resultado final da alteração."
+                ]
+            },
+            {
+                question: "Analisando a DRGE, o aumento da pressão intra-abdominal na obesidade contribui para o refluxo, que por sua vez, causa hiperplasia da camada basal. A sequência 'aumento da pressão -> refluxo -> alterações epiteliais' representa qual conceito?",
+                options: ["Etiologia.", "Anatomopatogenia.", "Adaptação.", "Fisiopatologia."],
+                correct: 1,
+                rationales: [
+                    "Incorreto. A etiologia seria a causa primária, como a disfunção do EEI. A sequência descrita é o mecanismo da doença.",
+                    "Correto. Este termo descreve *como a estrutura foi mudando*. A sequência mostra como um fator de risco (pressão) leva a um evento (refluxo) que, por sua vez, gera as alterações estruturais (hiperplasia).",
+                    "Incorreto. Embora a hiperplasia seja uma forma de adaptação celular, o termo não engloba toda a sequência causal descrita.",
+                    "Incorreto. A fisiopatologia descreve o que mudou na função, como a falha do esfíncter. O termo que descreve *como a estrutura* mudou é a anatomopatogenia."
+                ]
+            },
+            {
+                question: "A ingestão de soda cáustica pode levar à necrose total da parede esofágica. A análise macroscópica dessa lesão se enquadra no campo da:",
+                options: ["Histopatologia.", "Fisiopatologia.", "Anatomopatologia.", "Etiologia."],
+                correct: 2,
+                rationales: [
+                    "Incorreto. A histopatologia é estritamente microscópica.",
+                    "Incorreto. A fisiopatologia abordaria a perda da função de condução do esôfago, não a sua aparência morfológica.",
+                    "Correto. A anatomopatologia estuda as alterações morfológicas, tanto macroscópicas (visíveis a olho nu) quanto microscópicas.",
+                    "Incorreto. A etiologia é a causa, ou seja, a soda cáustica, não o estudo da alteração resultante."
+                ]
+            },
+            {
+                question: "A afirmação 'o tabagismo reduz o tônus do esfíncter esofágico inferior, facilitando o retorno do conteúdo gástrico para o esôfago' refere-se primariamente à:",
+                options: ["Fisiopatogenia da DRGE.", "Histopatologia da DRGE.", "Etiologia da DRGE.", "Patologia da DRGE."],
+                correct: 0,
+                rationales: [
+                    "Correto. O termo descreve *como a função* (o tônus do esfíncter) foi mudando devido a um fator de risco (tabagismo), levando à condição patológica (refluxo).",
+                    "Incorreto. A histopatologia se refere às alterações teciduais microscópicas resultantes, como a hiperplasia basal.",
+                    "Incorreto. O tabagismo é um fator de risco, mas a etiologia direta é a disfunção do EEI. A frase descreve o mecanismo funcional.",
+                    "Incorreto. Patologia é um termo geral. Fisiopatogenia é mais específico para descrever *como a função* mudou."
+                ]
+            },
+            {
+                question: "Qual é a diferença fundamental entre 'Patogenia' e 'Fisiopatogenia'?",
+                options: [
+                    "Patogenia é a causa da doença e Fisiopatogenia são as alterações estruturais.",
+                    "Patogenia é o mecanismo geral da doença e Fisiopatogenia é o mecanismo específico de como a função foi alterada.",
+                    "Patogenia estuda as alterações macroscópicas e Fisiopatogenia as microscópicas.",
+                    "Não há diferença, são termos sinônimos."
+                ],
+                correct: 1,
+                rationales: [
+                    "Incorreto. A causa é a etiologia. As alterações estruturais são do campo da anatomopatologia.",
+                    "Correto. A patogenia é o mecanismo amplo de como a doença se instala, enquanto a fisiopatogenia foca especificamente em como a função normal foi se alterando.",
+                    "Incorreto. Isso confunde os conceitos com anatomopatologia e histopatologia.",
+                    "Incorreto. O documento distingue claramente os termos, com a fisiopatogenia sendo um subconjunto mais específico."
+                ]
+            },
+            // Parte 2: Esofagites Infecciosas
+            {
+                question: "Um paciente transplantado há 4 meses apresenta odinofagia. A biópsia revela úlceras profundas e, na microscopia, células endoteliais com grandes inclusões intranucleares em 'olho de coruja'. Qual o diagnóstico?",
+                options: ["Esofagite herpética (HSV).", "Esofagite por Citomegalovírus (CMV).", "Esofagite por Candida albicans.", "Esofagite química por medicação."],
+                correct: 1,
+                rationales: [
+                    "Incorreto. A esofagite por HSV geralmente ocorre mais cedo após o transplante (logo após) e é caracterizada por úlceras rasas e células gigantes multinucleadas.",
+                    "Correto. Ocorre mais tardiamente após o transplante (2 a 6 meses), causa úlceras profundas e lineares, e a histologia com inclusões em 'olho de coruja' é patognomônica.",
+                    "Incorreto. A Candida causa placas pseudomembranosas acinzentadas e a microscopia mostra pseudo-hifas e esporos.",
+                    "Incorreto. Embora possível, o achado histológico específico de inclusões virais em 'olho de coruja' confirma a etiologia infecciosa por CMV."
+                ]
+            },
+            {
+                question: "Na esofagite por Candida, as pseudomembranas acinzentadas observadas macroscopicamente são constituídas por qual dos seguintes componentes?",
+                options: [
+                    "Apenas por uma densa camada de pseudo-hifas e esporos fúngicos.",
+                    "Material necrótico, células inflamatórias (neutrófilos), esporos e pseudo-hifas.",
+                    "Epitélio escamoso esofágico que sofreu necrose, sem componente inflamatório.",
+                    "Fibrina, linfócitos e um grande número de eosinófilos."
+                ],
+                correct: 1,
+                rationales: [
+                    "Incompleto. As pseudomembranas não são compostas apenas por fungos.",
+                    "Correto. A descrição do documento é precisa ao afirmar que as pseudomembranas são um agregado de fungos, tecido necrosado e a resposta inflamatória neutrofílica do hospedeiro.",
+                    "Incorreto. Há um componente inflamatório significativo (neutrófilos), e a necrose total sem neutrófilos é mais característica de lesões químicas agudas.",
+                    "Incorreto. A resposta inflamatória aguda na esofagite por Candida é predominantemente neutrofílica, não linfocítica ou eosinofílica."
+                ]
+            },
+            {
+                question: "Qual padrão macroscópico na endoscopia é mais sugestivo de esofagite por HSV?",
+                options: [
+                    "Lesões lineares e profundas, como 'arranhões'.",
+                    "Placas esbranquiçadas e aderentes que podem ser removidas.",
+                    "Múltiplas lesões pequenas, rasas, com bordas elevadas e centro escavado ('em saca-bocado').",
+                    "Mucosa com aparência 'felina' ou com anéis concêntricos."
+                ],
+                correct: 2,
+                rationales: [
+                    "Incorreto. Este padrão de lesões lineares e profundas é a descrição clássica da esofagite por CMV.",
+                    "Incorreto. Este é o padrão clássico da esofagite por Candida albicans.",
+                    "Correto. Esta é a descrição morfológica macroscópica característica da esofagite herpética em sua fase inicial.",
+                    "Incorreto. Esta aparência é sugestiva de esofagite eosinofílica."
+                ]
+            },
+            {
+                question: "Um paciente com AIDS apresenta esofagite infecciosa. Qual afirmação sobre a prevalência dos agentes virais é correta neste grupo?",
+                options: [
+                    "HSV e CMV têm prevalência semelhante em pacientes com AIDS.",
+                    "A esofagite por HSV é muito mais comum que a por CMV em pacientes com AIDS.",
+                    "A esofagite por CMV é muito mais comum que a por HSV em pacientes com AIDS.",
+                    "Nenhum dos dois vírus é comum, sendo a Candida o agente quase exclusivo."
+                ],
+                correct: 2,
+                rationales: [
+                    "Incorreto. O texto afirma que há uma diferença significativa na prevalência entre os dois vírus neste grupo.",
+                    "Incorreto. O texto afirma o oposto.",
+                    "Correto. O documento especifica que, na população com AIDS, a infecção por CMV é muito mais frequente que por HSV.",
+                    "Incorreto. Embora a Candida seja comum, as esofagites virais também ocorrem, e o texto destaca a importância do CMV neste cenário."
+                ]
+            },
+            {
+                question: "A análise microscópica de uma biópsia de esôfago mostra células escamosas multinucleadas com núcleos de cromatina marginada e aparência de 'vidro fosco'. Qual é o agente etiológico?",
+                options: ["Citomegalovírus (CMV).", "Candida albicans.", "Vírus Herpes Simples (HSV).", "Vírus do Papiloma Humano (HPV)."],
+                correct: 2,
+                rationales: [
+                    "Incorreto. O CMV é caracterizado por inclusões grandes e únicas em 'olho de coruja', geralmente em células endoteliais ou estromais.",
+                    "Incorreto. A Candida é identificada pela presença de pseudo-hifas e esporos.",
+                    "Correto. As células gigantes multinucleadas e os núcleos em 'vidro fosco' são os achados microscópicos característicos da infecção por HSV.",
+                    "Não mencionado no texto. O HPV causa outras alterações celulares (coilocitose), mas não as descritas."
+                ]
+            },
+            {
+                question: "Lesões esofágicas induzidas por agentes químicos, como a soda cáustica, podem se diferenciar das esofagites infecciosas agudas por uma característica histológica principal. Qual é essa característica?",
+                options: [
+                    "Presença de um intenso infiltrado de eosinófilos.",
+                    "Formação de pseudomembranas com pseudo-hifas.",
+                    "Necrose total da parede com ausência ou escassez de neutrófilos.",
+                    "Hiperplasia da camada basal e alongamento das papilas."
+                ],
+                correct: 2,
+                rationales: [
+                    "Incorreto. Eosinófilos são característicos de esofagite eosinofílica ou podem estar presentes na DRGE.",
+                    "Incorreto. Isso é característico da esofagite por Candida.",
+                    "Correto. O documento menciona que lesões químicas graves podem causar necrose total da parede esofágica com ausência de neutrófilos, ao contrário da maioria das esofagites infecciosas que cursam com infiltrado neutrofílico.",
+                    "Incorreto. Essas são alterações crônicas, típicas da esofagite de refluxo."
+                ]
+            },
+            // Parte 3: Esofagite Eosinofílica
+            {
+                question: "Um patologista encontra 12 eosinófilos/CGA e hiperplasia basal em biópsia de paciente com refluxo. Qual a interpretação?",
+                options: [
+                    "Diagnóstico de Esofagite Eosinofílica (EEo).",
+                    "Quadro compatível com Esofagite de Refluxo (DRGE).",
+                    "Diagnóstico inconclusivo, necessita nova biópsia.",
+                    "Diagnóstico de Esofagite Infecciosa."
+                ],
+                correct: 1,
+                rationales: [
+                    "Incorreto. A mera presença de eosinófilos não é suficiente. É necessário um critério quantitativo (>15/CGA).",
+                    "Correto. A contagem <15 eosinófilos/CGA não classifica como EEo e pode ser encontrada na DRGE. Os outros achados são compatíveis com DRGE.",
+                    "Incorreto. A contagem de 12 eosinófilos/CGA é um dado objetivo que, associado aos outros achados, permite uma forte suspeita diagnóstica de DRGE.",
+                    "Incorreto. Este não é o contexto clínico e histológico mais provável para uma infecção parasitária.",
+                ]
+            },
+            {
+                question: "Qual citocina é a principal responsável pelo RECRUTAMENTO de eosinófilos na Esofagite Eosinofílica?",
+                options: ["Interleucina-4 (IL-4).", "Interleucina-5 (IL-5).", "Interleucina-13 (IL-13).", "Fator de Necrose Tumoral Alfa (TNF-α)."],
+                correct: 1,
+                rationales: [
+                    "Incorreto. A IL-4 está envolvida na patogênese, principalmente promovendo a produção de IgE, mas não é a principal citocina para o recrutamento de eosinófilos.",
+                    "Correto. O texto afirma que a cascata de ativação de células Th2 leva à produção de IL-5, que é uma citocina pró-alérgica crucial no recrutamento de eosinófilos.",
+                    "Incorreto. A IL-13 também é uma citocina pró-alérgica importante na EEo, mas a IL-5 tem o papel mais direto e proeminente no recrutamento específico de eosinófilos.",
+                    "Incorreto. O TNF-α é uma citocina pró-inflamatória, mas não está centralmente envolvida na patogenia alérgica da EEo."
+                ]
+            },
+            {
+                question: "Qual das seguintes condições clínicas é mais frequentemente associada a pacientes com Esofagite Eosinofílica, reforçando sua base atópica?",
+                options: ["Hérnia de hiato.", "Infecção por H. pylori.", "Dermatite atópica e asma.", "Obesidade e tabagismo."],
+                correct: 2,
+                rationales: [
+                    "Incorreto. A hérnia de hiato é um fator de risco importante para a DRGE, não para a EEo.",
+                    "Incorreto. Não há associação descrita no texto entre infecção por H. pylori e EEo.",
+                    "Correto. A EEo é frequentemente associada a outras doenças atópicas, como dermatite atópica, rinite alérgica e asma, indicando uma predisposição sistêmica à inflamação alérgica.",
+                    "Incorreto. Estes são fatores de risco clássicos para a DRGE, não para a EEo."
+                ]
+            },
+            {
+                question: "A aparência endoscópica 'felina' ou 'em anel' é sugestiva de EEo. Qual processo patológico subjacente é o principal responsável por essa morfologia?",
+                options: [
+                    "Ulcerações profundas causadas por infecção viral.",
+                    "Metaplasia intestinal com formação de ilhas de tecido gástrico.",
+                    "Inflamação crônica, edema e fibrose subepitelial.",
+                    "Necrose da mucosa por refluxo biliar."
+                ],
+                correct: 2,
+                rationales: [
+                    "Incorreto. Úlceras são típicas de esofagites infecciosas (HSV, CMV), não da EEo.",
+                    "Incorreto. Isso descreve o Esôfago de Barrett, que tem uma aparência macroscópica diferente (avermelhada).",
+                    "Correto. A infiltração maciça de eosinófilos causa inflamação crônica, edema (espongiose) e, com o tempo, fibrose, o que leva ao espessamento e à perda de elasticidade da parede, formando os anéis concêntricos.",
+                    "Incorreto. O refluxo pode causar inflamação, mas não tipicamente a formação de anéis fixos como na EEo."
+                ]
+            },
+            {
+                question: "Para o diagnóstico de EEo, por que biópsias de apenas uma porção do esôfago podem levar a um resultado falso-negativo?",
+                options: [
+                    "Porque a inflamação eosinofílica é restrita à junção esofagogástrica.",
+                    "Porque o infiltrado eosinofílico pode ser irregular e afetar tanto o terço distal quanto o proximal.",
+                    "Porque os eosinófilos migram rapidamente e só são detectáveis no período pós-prandial.",
+                    "Porque a contagem de eosinófilos só é válida se a amostra incluir a camada muscular da mucosa."
+                ],
+                correct: 1,
+                rationales: [
+                    "Incorreto. A inflamação pode ocorrer em toda a extensão do esôfago.",
+                    "Correto. O texto menciona que o infiltrado pode ser encontrado no terço distal e proximal. A distribuição pode ser irregular, tornando necessário coletar biópsias de múltiplos locais para aumentar a sensibilidade do diagnóstico.",
+                    "Incorreto. A infiltração tecidual é um processo crônico e não transitório a ponto de exigir um momento específico para a biópsia.",
+                    "Incorreto. O critério diagnóstico se refere ao infiltrado eosinofílico *intraepitelial*, ou seja, no epitélio da mucosa."
+                ]
+            },
+            {
+                question: "A complicação mais comum da Esofagite Eosinofílica não tratada é:",
+                options: ["Adenocarcinoma de esôfago.", "Perfuração esofágica espontânea.", "Estenose esofágica e formação de anéis fibróticos.", "Metaplasia intestinal."],
+                correct: 2,
+                rationales: [
+                    "Incorreto. O adenocarcinoma é a complicação temida do Esôfago de Barrett, não da EEo.",
+                    "Incorreto. Embora a mucosa esteja inflamada, a perfuração espontânea é rara. O risco aumenta durante procedimentos.",
+                    "Correto. O documento afirma que, se não tratada, a inflamação crônica leva a estreitamento e estenose esofágica devido à fibrose.",
+                    "Incorreto. A metaplasia intestinal é a característica definidora do Esôfago de Barrett, que tem uma etiopatogenia diferente."
+                ]
+            },
+            // Parte 4: DRGE e Esofagite de Refluxo
+            {
+                question: "Qual é a causa MAIS COMUM para o desenvolvimento da DRGE?",
+                options: ["Hérnia de hiato.", "Atraso no esvaziamento gástrico.", "Relaxamento transitório do esfíncter esofágico inferior (EEI).", "Aumento da pressão intra-gástrica devido à obesidade."],
+                correct: 2,
+                rationales: [
+                    "Incorreto. A hérnia de hiato é um importante fator de risco, mas não é considerada a causa mais comum do refluxo em si.",
+                    "Incorreto. O atraso no esvaziamento gástrico é um fator de risco, mas não é a causa mais frequente.",
+                    "Correto. O documento aponta explicitamente que a causa mais comum da DRGE é o relaxamento transitório do EEI.",
+                    "Incorreto. A obesidade é um fator de risco significativo, mas o mecanismo primário mais comum citado é o relaxamento transitório do EEI."
+                ]
+            },
+            {
+                question: "Qual critério, segundo o texto, é o mais aceito para o diagnóstico CLÍNICO de DRGE?",
+                options: [
+                    "Qualquer episódio de pirose e regurgitação após uma refeição pesada.",
+                    "Presença de sintomas típicos (pirose e regurgitação) pelo menos duas vezes na semana, comprometendo a qualidade de vida.",
+                    "Achado de eritema da mucosa esofágica na endoscopia.",
+                    "Tosse recorrente e disfagia, mesmo sem pirose."
+                ],
+                correct: 1,
+                rationales: [
+                    "Incorreto. Episódios ocasionais podem ser fisiológicos. O critério envolve frequência e impacto na qualidade de vida.",
+                    "Correto. O texto cita exatamente este critério para o diagnóstico clínico da condição patológica (DRGE), distinguindo-a do refluxo fisiológico.",
+                    "Incorreto. A endoscopia pode ser normal em muitos pacientes com DRGE (doença não erosiva). O diagnóstico é primariamente clínico.",
+                    "Incorreto. Tosse e disfagia são sintomas importantes, mas o critério diagnóstico mais aceito baseia-se nos sintomas típicos de pirose e regurgitação."
+                ]
+            },
+            {
+                question: "Qual alteração microscópica na esofagite de refluxo representa uma resposta para acelerar a renovação celular frente ao dano epitelial?",
+                options: ["Infiltrado de neutrófilos e eosinófilos.", "Alongamento das papilas da lâmina própria.", "Espongiose (edema intercelular).", "Hiperplasia da camada basal (> 15-20% da espessura)."],
+                correct: 3,
+                rationales: [
+                    "Incorreto. O infiltrado inflamatório é um sinal de lesão ativa, não um mecanismo de renovação celular.",
+                    "Incorreto. O alongamento papilar visa a aumentar o suprimento vascular para o epitélio danificado, suportando a renovação, mas não é a renovação em si.",
+                    "Incorreto. A espongiose é um sinal de dano epitelial e aumento da permeabilidade, não uma resposta de renovação.",
+                    "Correto. O espessamento da camada basal (a camada germinativa do epitélio) é resultado direto do aumento da renovação celular como resposta ao dano crônico."
+                ]
+            },
+            {
+                question: "Qual é a principal diferença entre o RGE fisiológico do lactente e a DRGE?",
+                options: [
+                    "O RGE só ocorre em lactentes, enquanto a DRGE só ocorre em adultos.",
+                    "O RGE é normal e autolimitado, enquanto a DRGE é crônica e associada a complicações.",
+                    "O RGE envolve apenas leite, enquanto a DRGE envolve ácido gástrico.",
+                    "O RGE é tratado com mudanças posturais, enquanto a DRGE sempre exige cirurgia."
+                ],
+                correct: 1,
+                rationales: [
+                    "Incorreto. A DRGE pode ocorrer em qualquer idade, incluindo lactentes, se houver complicações.",
+                    "Correto. O texto diferencia claramente o RGE fisiológico e transitório do lactente da DRGE, que é crônica e causa problemas de bem-estar ou lesões teciduais.",
+                    "Incorreto. O conteúdo refluído em ambos os casos vem do estômago e é ácido. A diferença está nas consequências.",
+                    "Incorreto. A DRGE é manejada com um espectro de tratamentos, desde medicamentos até cirurgia em casos graves."
+                ]
+            },
+            {
+                question: "Qual dos seguintes fatores de risco para DRGE atua primariamente pelo aumento da pressão intra-gástrica?",
+                options: ["Uso de depressores do sistema nervoso central.", "Consumo de chocolate.", "Gravidez.", "Tabagismo."],
+                correct: 2,
+                rationales: [
+                    "Incorreto. Depressores do SNC atuam reduzindo o tônus do EEI.",
+                    "Incorreto. O chocolate é citado como um fator que reduz o tônus do EEI.",
+                    "Correto. A gravidez, assim como a obesidade, contribui para a DRGE principalmente pelo aumento da pressão intra-abdominal e intra-gástrica.",
+                    "Incorreto. O tabagismo é um fator de risco conhecido por reduzir o tônus do EEI."
+                ]
+            },
+            {
+                question: "O relaxamento fisiológico do EEI ocorre em qual situação?",
+                options: ["Durante um esforço de tosse.", "Imediatamente após a ingestão de álcool.", "Durante a deglutição.", "No período pós-prandial em decúbito."],
+                correct: 2,
+                rationales: [
+                    "Incorreto. A tosse causa uma abertura forçada do esfíncter, não um relaxamento fisiológico.",
+                    "Incorreto. O álcool causa uma redução patológica do tônus do EEI.",
+                    "Correto. O texto descreve o 'relaxamento receptivo' do EEI durante a deglutição como um mecanismo normal que permite a passagem do bolo alimentar.",
+                    "Incorreto. Nesta situação, o risco de refluxo aumenta, mas o relaxamento fisiológico programado ocorre com a deglutição."
+                ]
+            },
+            // Parte 5: Esôfago de Barrett
+            {
+                question: "Qual é a definição histopatológica INDISPENSÁVEL para o diagnóstico de Esôfago de Barrett?",
+                options: [
+                    "Substituição do epitélio pavimentoso por qualquer epitélio colunar.",
+                    "Presença de epitélio colunar simples especializado do tipo intestinal, com células caliciformes.",
+                    "Infiltrado inflamatório crônico com displasia de baixo grau.",
+                    "Hiperplasia da camada basal e alongamento papilar."
+                ],
+                correct: 1,
+                rationales: [
+                    "Incorreto. O diagnóstico requer um tipo específico de epitélio colunar para confirmar o Esôfago de Barrett e seu risco associado.",
+                    "Correto. A presença de células caliciformes, que secretam muco (típicas do intestino), em meio a um epitélio colunar no esôfago é o que define a metaplasia intestinal do Esôfago de Barrett.",
+                    "Incorreto. A displasia é uma complicação do Esôfago de Barrett, não a sua definição. A metaplasia pode existir sem displasia.",
+                    "Incorreto. Essas são as características da esofagite de refluxo, a condição que precede o Esôfago de Barrett."
+                ]
+            },
+            {
+                question: "O Esôfago de Barrett é a principal lesão precursora para qual tipo de neoplasia e em qual localização?",
+                options: [
+                    "Carcinoma espinocelular no terço superior.",
+                    "Adenocarcinoma no terço inferior.",
+                    "Linfoma MALT em qualquer porção.",
+                    "Carcinoma neuroendócrino no terço médio."
+                ],
+                correct: 1,
+                rationales: [
+                    "Incorreto. O carcinoma espinocelular está associado a álcool e tabaco e ocorre mais comumente nos terços superior e médio.",
+                    "Correto. A metaplasia intestinal do Esôfago de Barrett ocorre no esôfago distal (inferior) e aumenta o risco de adenocarcinoma nesta localização.",
+                    "Incorreto. O linfoma MALT está tipicamente associado à infecção por H. pylori no estômago.",
+                    "Incorreto. Tumores neuroendócrinos são raros e não são a complicação neoplásica característica do Esôfago de Barrett."
+                ]
+            },
+            {
+                question: "Qual é o objetivo fisiológico da mudança celular que ocorre no Esôfago de Barrett?",
+                options: [
+                    "Aumentar a capacidade de absorção de nutrientes no esôfago.",
+                    "Criar um epitélio mais resistente à agressão mecânica do bolo alimentar.",
+                    "Substituir o epitélio sensível ao ácido por um epitélio que produz muco protetor.",
+                    "Iniciar o processo de digestão de proteínas já no esôfago."
+                ],
+                correct: 2,
+                rationales: [
+                    "Incorreto. A função do esôfago é de condução, não de absorção.",
+                    "Incorreto. O epitélio escamoso original já é bem adaptado para a resistência mecânica.",
+                    "Correto. A metaplasia para um tipo intestinal é uma resposta adaptativa que visa a substituir o epitélio vulnerável ao ácido por um epitélio secretor de muco, mais resistente.",
+                    "Incorreto. A metaplasia é uma resposta de proteção, não uma mudança funcional digestiva."
+                ]
+            },
+            {
+                question: "Qual é o perfil epidemiológico mais comum para um paciente com Esôfago de Barrett?",
+                options: [
+                    "Mulheres, com idade inferior a 30 anos, com história de esofagite infecciosa.",
+                    "Homens brancos, com idade entre 40 e 60 anos, com DRGE sintomática.",
+                    "Indivíduos de qualquer sexo ou etnia, com mais de 70 anos, com hérnia de hiato.",
+                    "Pacientes jovens com história de dermatite atópica e asma."
+                ],
+                correct: 1,
+                rationales: [
+                    "Incorreto. O perfil epidemiológico é bem diferente.",
+                    "Correto. O texto especifica que a condição é mais comum em brancos, na faixa etária de 40 a 60 anos, e ocorre em 5 a 10% dos pacientes com DRGE sintomática. Homens são mais afetados.",
+                    "Incorreto. Embora a idade avançada e a hérnia de hiato sejam fatores de risco, o perfil demográfico descrito no texto é mais específico.",
+                    "Incorreto. Este é o perfil epidemiológico associado à Esofagite Eosinofílica."
+                ]
+            },
+            {
+                question: "No modelo 'metaplasia -> displasia -> neoplasia', o que significa o passo 'displasia' no Esôfago de Barrett?",
+                options: [
+                    "A invasão de células cancerosas na lâmina própria.",
+                    "A substituição do epitélio escamoso por colunar.",
+                    "Proliferação celular com atipia citológica e arquitetural, mas ainda confinada ao epitélio.",
+                    "Uma inflamação aguda com grande infiltrado de neutrófilos."
+                ],
+                correct: 2,
+                rationales: [
+                    "Incorreto. A invasão da lâmina própria já define o adenocarcinoma (neoplasia maligna invasiva), não a displasia.",
+                    "Incorreto. Esta é a definição de metaplasia, o passo anterior à displasia.",
+                    "Correto. A displasia é uma lesão pré-neoplásica caracterizada por alterações celulares e arquiteturais de malignidade, mas que ainda não rompeu a membrana basal.",
+                    "Incorreto. A inflamação pode coexistir e até promover a displasia, mas não é a sua definição."
+                ]
+            },
+            {
+                question: "Um paciente com Esôfago de Barrett tem um risco aumentado de adenocarcinoma de aproximadamente 10%. O que essa estatística, citada no texto, realmente significa?",
+                options: [
+                    "10% de todos os pacientes com adenocarcinoma de esôfago tinham Esôfago de Barrett.",
+                    "10% dos indivíduos na população geral com DRGE desenvolverão adenocarcinoma.",
+                    "10% dos indivíduos diagnosticados com Esôfago de Barrett eventualmente desenvolverão adenocarcinoma.",
+                    "O risco de desenvolver adenocarcinoma aumenta em 10% a cada ano após o diagnóstico de Barrett."
+                ],
+                correct: 2,
+                rationales: [
+                    "Incorreto. Isso inverte a estatística. A questão é sobre o risco de quem tem Barrett.",
+                    "Incorreto. O risco é para aqueles que já progrediram para Esôfago de Barrett, não para todos com DRGE.",
+                    "Correto. O texto afirma que 10% dos indivíduos com esôfago de Barrett desenvolvem adenocarcinoma, indicando o risco de progressão para malignidade dentro deste grupo específico.",
+                    "Incorreto. O texto menciona um risco de desenvolvimento, não uma taxa de incidência anual de 10%, que seria extremamente alta."
+                ]
+            }
+        ];
+
+        // Elementos do DOM
+        const quizContentEl = document.getElementById('quiz-content');
+        const nextBtn = document.getElementById('next-btn');
+        const progressBar = document.getElementById('progress-bar');
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            nextBtn.innerHTML = "Próxima";
+            nextBtn.classList.add('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            quizContentEl.innerHTML = '';
+            const currentQuestion = quizData[currentQuestionIndex];
+            const questionEl = document.createElement('div');
+            questionEl.classList.add('fade-in');
+            
+            questionEl.innerHTML = `
+                <div class="mb-6">
+                    <p class="text-sm font-semibold text-blue-600">Questão ${currentQuestionIndex + 1} de ${quizData.length}</p>
+                    <h2 class="text-xl md:text-2xl font-semibold mt-1">${currentQuestion.question}</h2>
+                </div>
+                <div id="options-container" class="grid grid-cols-1 gap-4">
+                    ${currentQuestion.options.map((option, index) => `
+                        <div>
+                            <button class="option-btn w-full text-left p-4 bg-gray-100 rounded-lg border-2 border-transparent hover:bg-blue-100 hover:border-blue-300 focus:outline-none" data-index="${index}">
+                                ${option}
+                            </button>
+                            <div class="rationale mt-2 p-3 text-sm rounded-lg" data-rationale-index="${index}">
+                                ${currentQuestion.rationales[index]}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            quizContentEl.appendChild(questionEl);
+            
+            const optionButtons = quizContentEl.querySelectorAll('.option-btn');
+            optionButtons.forEach(button => {
+                button.addEventListener('click', selectAnswer);
+            });
+
+            updateProgressBar();
+        }
+
+        function selectAnswer(e) {
+            const selectedButton = e.target.closest('button');
+            const selectedIndex = parseInt(selectedButton.dataset.index);
+            const correctIndex = quizData[currentQuestionIndex].correct;
+
+            const optionButtons = quizContentEl.querySelectorAll('.option-btn');
+            optionButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-blue-100', 'hover:border-blue-300');
+            });
+
+            const rationales = quizContentEl.querySelectorAll('.rationale');
+            optionButtons.forEach((btn, index) => {
+                const rationaleEl = rationales[index];
+                rationaleEl.classList.add('show-rationale');
+
+                if (index === correctIndex) {
+                    btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800', 'font-semibold');
+                    rationaleEl.classList.add('bg-green-50', 'text-green-700');
+                } else {
+                    btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                    rationaleEl.classList.add('bg-red-50', 'text-red-700');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                score++;
+            }
+
+            nextBtn.classList.remove('hidden');
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.innerHTML = "Ver Resultado";
+            }
+        }
+
+        function showResults() {
+            quizContentEl.innerHTML = `
+                <div class="text-center fade-in p-8">
+                    <h2 class="text-3xl font-bold mb-4">Quiz Finalizado!</h2>
+                    <p class="text-xl mb-6">Você acertou <span class="font-bold text-blue-600">${score}</span> de <span class="font-bold">${quizData.length}</span> questões.</p>
+                    <div class="w-32 h-32 mx-auto mb-6 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span class="text-4xl font-bold text-blue-700">${Math.round((score / quizData.length) * 100)}%</span>
+                    </div>
+                    <button id="restart-btn" class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-transform transform hover:scale-105">
+                        Refazer o Quiz
+                    </button>
+                </div>
+            `;
+            nextBtn.classList.add('hidden');
+            document.getElementById('restart-btn').addEventListener('click', startQuiz);
+        }
+
+        function handleNextButtonClick() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                showQuestion();
+                nextBtn.classList.add('hidden');
+            } else {
+                showResults();
+            }
+        }
+        
+        function updateProgressBar() {
+            const progressPercentage = ((currentQuestionIndex) / quizData.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+
+        nextBtn.addEventListener('click', handleNextButtonClick);
+
+        startQuiz();
+    </script>
+
+</body>
+</html>
